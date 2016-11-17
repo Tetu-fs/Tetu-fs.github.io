@@ -118,35 +118,82 @@ header{
 #content ul li p{
   padding-left: 4px;
 }
-#content ul.show{
-	transition: 0.25s ease-in-out;
-  max-height: 400px;
-}
 
-#content ul.hide{
-	transition: 0.25s ease-in-out;
-  max-height: 40px;
+div#todomodalwrap{
+  display: flex;
+  justify-content: center;
+  align-items: center;  position: fixed;
+  top: 0;
+  left: 0;
+  background:rgba(20,20,20,0.5);
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  }
+div#todomodalwrap.show{
+  animation-duration: 0.5s;
+  animation-name: fade-in;
+}
+div.closearea{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+}
+div#todomodalwrap.hide{
+  opacity: 0;
+  display: none;
+}
+div#todomodal{
+  z-index: 10;
+  width: 480px;
+  word-wrap:break-word;
+  background: #456789;
+  border: solid 1px rgba(20,20,20,0.25);
+  border-radius: 12px;
+
+}
+div#todomodal h1{
+  padding:4px;
+  color:#fafafa;
+}
+div#todomodal h2{
+  padding:4px;
+  background: #abcdef;
+}
+div#todomodal div{
+  margin: 4px;
+  padding: 4px;
+  min-height: 64px;
+  background: #fafafa;
+  border-radius: 12px;
+}
+div#todomodal p{
+  padding:4px;
+  text-align: right;
+  color:#fafafa;
+
 }
 /*-----calendar-----*/
-div#modalwrap{
+div#calendarmodalwrap{
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  height:398px;
-  width:398px;
+  width: 100vw;
+  height: 100vh;
   background:rgba(20,20,20,0.5);
   }
-div#modalwrap.show{
+div#calendarmodalwrap.show{
   animation-duration: 0.5s;
   animation-name: fade-in;
 }
 
-div#modalwrap.hide{
+div#calendarmodalwrap.hide{
   opacity: 0;
   display: none;
 }
@@ -166,6 +213,8 @@ button#modalclose{
 
 
 div#calendarmodal{
+  z-index: 10;
+
   width: 239px;
   height: 265px;
   overflow: hidden;
@@ -211,13 +260,14 @@ div#labeldiv span#yearandmonth{
 div#labeldiv button{
   background-color: rgba(220,220,220,0.8);
   border: solid 1px rgba(20,20,20,0.25);
+  border-radius: 12px;
   cursor: pointer;
   outline: none;
   padding: 0;
   width: 24px;
   height: 24px;
   color:#777777;
-  border-radius: 12px;
+
 }
 div#labeldiv button:hover
 button#modalclose:hover,{

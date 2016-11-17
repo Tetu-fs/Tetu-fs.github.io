@@ -12,50 +12,44 @@ var myObj =
     todoCount: 0,
     todoSetup: function(limitLabel, title, task) {
       var today = new dateObj(new Date());
-      var todayLabel = today.year + "/" + (today.month + 1) + "/" + today.date;
+      var todayLabel = today.year + "/" + (today.month + 1) + "/" + today.today;
       var newTodo = new todoData(myObj.todoCount, title, task, todayLabel, limitLabel);
 
       var navi = document.getElementById("content");
       var todoElement = myObj.cardGenerator(newTodo);
-      var todoObj = { "id": newTodo.id, "todo": newTodo, "element": todoElement };
+      var todoObj = { "id": newTodo.id, "todo": newTodo, "elem": todoElement };
       myObj.todoList.push(todoObj);
 
-        navi.appendChild(todoElement);
-        myObj.todoCount++;
+      navi.appendChild(todoElement);
+      myObj.todoCount++;
     },
     cardGenerator: function(todo) {
-        var listLabel = document.createElement("h2");
-        var listTitle = document.createTextNode(todo.title);
-        var removeButton = document.createElement("button");
-        removeButton.appendChild(document.createTextNode("X"));
-        removeButton.className = "removecard";
-        removeButton.addEventListener("click", myObj.removeCard, false);
-        listLabel.appendChild(listTitle);
-        listLabel.appendChild(removeButton);
+      var listLabel = document.createElement("h2");
+      var listTitle = document.createTextNode(todo.title);
+      var removeButton = document.createElement("button");
+      removeButton.appendChild(document.createTextNode("X"));
+      removeButton.className = "removecard";
+      removeButton.addEventListener("click", myObj.removeCard, false);
+      listLabel.appendChild(listTitle);
+      listLabel.appendChild(removeButton);
 
-        listLabel.addEventListener("click", myObj.toggleNavigation);
+      listLabel.addEventListener("click", myObj.openCard, false);;
 
-        var ul = document.createElement("ul");
-        ul.className = "show";
-        var newDate = document.createElement("h3");
-        var dateLabel = document.createTextNode("期限: " + todo.limit);
+      var ul = document.createElement("ul");
+      var newDate = document.createElement("h3");
+      var dateLabel = document.createTextNode(todo.limit);
+      newDate.appendChild(dateLabel);
 
-        var newTask = document.createElement("p");
-        var taskInfo = document.createTextNode(todo.task);
-        newDate.appendChild(dateLabel);
-        newTask.appendChild(taskInfo);
-
-        var list = document.createElement("li");
-        list.appendChild(newDate);
-        list.appendChild(newTask);
-        ul.appendChild(listLabel);
-        ul.appendChild(list);
-        return ul;
+      var list = document.createElement("li");
+      list.appendChild(newDate);
+      ul.appendChild(listLabel);
+      ul.appendChild(list);
+      return ul;
     },
     removeCard: function(event) {
       var removeElement = event.target.parentNode.parentNode;
       for (var i = 0; i < myObj.todoList.length; i++) {
-        if (myObj.todoList[i].element === removeElement) {
+        if (myObj.todoList[i].elem === removeElement) {
           myObj.todoList[i].splice;
           removeElement.remove();
         }
@@ -64,14 +58,14 @@ var myObj =
     setEventListner: function() {
       window.addEventListener("beforeunload", myObj.formReset, false);
       document.getElementById("settodo").addEventListener("click", myObj.getformData, false);
-      document.getElementById("modalclose").addEventListener("click", calendarObj.toggleCalendar, false);
+      var closeAreas = document.getElementsByClassName("closearea");
+      for (var i = 0; i < closeAreas.length; i++) {
+        closeAreas[i].addEventListener("click", myObj.closeModal, false);
+      }
       var inputAreas = document.getElementsByClassName("dateinput");
       for (var i = 0; i < inputAreas.length; i++) {
         inputAreas[i].addEventListener("click", calendarObj.toggleCalendar, false);
       }
-    },
-    toggleNavigation: function(event) {
-      event.target.parentNode.className = event.target.parentNode.className === "show" ? "hide" : "show";
     },
     getformData: function(event) {
       var formChildren = document.getElementsByClassName("taskinput");
@@ -85,23 +79,24 @@ var myObj =
       var title = formDatas[3];
       var task = formDatas[4];
       var isChecked = true;
-      var limitDayLabel;
+      var limidate;
       if (year !== "" && month !== "" && date !== "") {
-        limitDayLabel = year + "年" + month + "月" + date + "日";
+        limidate = year + "年" + month + "月" + date + "日";
       }
       else if (year !== "" && month !== "" && date === "") {
-        limitDayLabel = year + "年" + month + "月";
+        limidate = year + "年" + month + "月";
       }
       else if (year === "" && month !== "" && date !== "") {
         year = new Date().getFullYear();
-        limitDayLabel = year + "年" + month + "月" + date + "日";
+        limidate = year + "年" + month + "月" + date + "日";
       }
       else if (year === "" && month === "" && date === "") {
-        limitDayLabel = "なし";
+        limidate = "なし";
       }
       else {
         isChecked = false;
       }
+      var limitDayLabel = "期限 : " + limidate;
 
       if (title !== "" && isChecked) {
         myObj.todoSetup(limitDayLabel, title, task);
@@ -110,21 +105,57 @@ var myObj =
         alert("タイトルまたは期限を確認してください。");
       }
     },
-    formReset: function(event) { document.getElementById("taskform").reset(); }
+    formReset: function(event) { document.getElementById("taskform").reset(); },
+    openCard: function(event) {
+      var todo;
+      for (var i = 0; i < myObj.todoList.length; i++) {
+        if (myObj.todoList[i].elem === event.target.parentNode) {
+          todo = myObj.todoList[i].todo;
+        }
+      }
+      var modalWrap = document.getElementById("todomodalwrap");
+      var modal = document.createElement("div");
+      modal.id = "todomodal";
+
+      var title = document.createElement("h1");
+      var limit = document.createElement("h2");
+      var info = document.createElement("div");
+      var setDate = document.createElement("p");
+
+      var titleText = document.createTextNode(todo.title);
+      var limitLabel = document.createTextNode(todo.limit);
+      var infoText = document.createTextNode(todo.task);
+      var setDateLabel = document.createTextNode("作成日 : " + todo.setDate);
+
+      title.appendChild(titleText);
+      limit.appendChild(limitLabel);
+      info.appendChild(infoText);
+      setDate.appendChild(setDateLabel);
+      modal.appendChild(title);
+      modal.appendChild(limit);
+      modal.appendChild(info);
+      modal.appendChild(setDate);
+      modalWrap.appendChild(modal);
+      modalWrap.className = "show";
+    },
+    closeModal: function(event) {
+      document.getElementById("todomodal").remove();
+      event.target.parentNode.className = "hide";
+    }
   }
 
 var dateObj = function(date) {
   this.year = date.getFullYear();
   this.month = date.getMonth();
-  this.today = date.getMonth();
-  this.day = date.getMonth();
+  this.today = date.getDate();
+  this.day = date.getDay();
   this.thisMonthDay = new Date(this.year, this.month + 1, 0, 0, 0, 0, 0).getDate();
   this.thisMonthStartDay = new Date(this.year, this.month, 1, 0, 0, 0, 0).getDay();
   this.formatDate = this.year + "/" + (this.month + 1) + "/" + this.day;
 }
 var calendarObj = {
   toggleCalendar: function(event) {
-    var modalWrap = document.getElementById("modalwrap");
+    var modalWrap = document.getElementById("calendarmodalwrap");
     modalWrap.className = modalWrap.className === "hide" ? "show" : "hide";
     calendarObj.setupCalender();
   },
