@@ -139,7 +139,9 @@ var myObj =
       modalWrap.className = "show";
     },
     closeModal: function(event) {
-      document.getElementById("todomodal").remove();
+      if (event.target.parentNode.id === "todomodalwrap") {
+        document.getElementById("todomodal").remove();
+      }  
       event.target.parentNode.className = "hide";
     }
   }
