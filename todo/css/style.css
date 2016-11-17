@@ -260,13 +260,13 @@ table#calendar {
 	text-align: center;
 	vertical-align: middle;
 	background: #ddeeff;
-	table-layout: fixed;
+	table-layout: auto;
 	margin: 0 auto;
 }
 table#calendar th, table#calendar td {
-	width: 31px;
-	height: 31px;
-	border-left: 1px solid #123456;
+	min-width: 31px;
+	min-height: 31px;
+  border-left: 1px solid #123456;
 	border-bottom: 1px solid #123456;
 }
 table#calendar td.anothermonth {
