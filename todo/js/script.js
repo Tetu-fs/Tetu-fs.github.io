@@ -79,7 +79,14 @@ var myObj =
       var title = formDatas[3];
       var task = formDatas[4];
       var isChecked = true;
-      var limitDayLabel = "期限 : " + year + "年" + month + "月" + date + "日";
+      var limidate;
+      if (year === "" && month === "" && date === "") {
+        limidate = "なし";
+      }
+      else {
+        limidate = year + "年" + month + "月" + date + "日";
+      }
+      var limitDayLabel = "期限 : " + limidate;
 
       if (title !== "") {
         myObj.todoSetup(limitDayLabel, title, task);
@@ -124,7 +131,7 @@ var myObj =
     closeModal: function(event) {
       if (event.target.parentNode.id === "todomodalwrap") {
         document.getElementById("todomodal").remove();
-      }  
+      }
       event.target.parentNode.className = "hide";
     }
   }
