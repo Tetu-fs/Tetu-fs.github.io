@@ -79,30 +79,13 @@ var myObj =
       var title = formDatas[3];
       var task = formDatas[4];
       var isChecked = true;
-      var limidate;
-      if (year !== "" && month !== "" && date !== "") {
-        limidate = year + "年" + month + "月" + date + "日";
-      }
-      else if (year !== "" && month !== "" && date === "") {
-        limidate = year + "年" + month + "月";
-      }
-      else if (year === "" && month !== "" && date !== "") {
-        year = new Date().getFullYear();
-        limidate = year + "年" + month + "月" + date + "日";
-      }
-      else if (year === "" && month === "" && date === "") {
-        limidate = "なし";
-      }
-      else {
-        isChecked = false;
-      }
-      var limitDayLabel = "期限 : " + limidate;
+      var limitDayLabel = "期限 : " + year + "年" + month + "月" + date + "日";
 
-      if (title !== "" && isChecked) {
+      if (title !== "") {
         myObj.todoSetup(limitDayLabel, title, task);
         myObj.formReset();
       } else {
-        alert("タイトルまたは期限を確認してください。");
+        alert("タイトルを入力してください。");
       }
     },
     formReset: function(event) { document.getElementById("taskform").reset(); },
